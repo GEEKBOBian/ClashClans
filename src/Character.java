@@ -17,6 +17,10 @@ public class Character {
     public boolean isAlive;            //a boolean to denote if the hero is alive or dead.//a boolean to denote if the hero is alive or dead.
     public Rectangle rec;
     public boolean isCrashing;
+    public boolean up;
+    public boolean down;
+    public boolean left;
+    public boolean right;
 
     public void bounce() {//bounce off east wall
         if (xpos > 900) {
@@ -35,6 +39,48 @@ public class Character {
         ypos = ypos + dy;
 
         rec = new Rectangle(xpos, ypos, width, height);
+    }
+    public void control() {
+            if (up== true){
+                dy =-5;
+            }
+            if (down== true){
+                dy = 5;
+            }
+            if (left== true){
+                dx =-5;
+            }
+            if (right== true){
+                dx =5;
+            }
+
+            if (up == false && down == false && left == false && right == false){
+
+                dx = 0;
+                dy = 0;
+            }
+            if (up == false && down == false ){
+                dy = 0;
+            }
+            if (left == false && right == false){
+                dx = 0;
+            }
+//            if (xpos > 900) {
+//                dx = -dx;
+//            }
+//            if (xpos < 0) {//bounce off west wall
+//                dx = -dx;
+//            }
+//            if (ypos > 600) {//bounce off south wall
+//                dy = -dy;
+//            }
+//            if (ypos < 0) {//bounce off north wall
+//                dy = -dy;
+//            }
+            xpos = xpos + dx;
+            ypos = ypos + dy;
+
+            rec = new Rectangle(xpos, ypos, width, height);
     }
 
     public void wrap() {
@@ -74,6 +120,10 @@ public class Character {
         height = 60;
         isAlive = true;
         rec = new Rectangle(xpos, ypos, width, height);
+        up = false;
+        down = false;
+        left = false;
+        right = false;
 
 
     } // constructor

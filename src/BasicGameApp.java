@@ -13,6 +13,8 @@
 
 //Graphics Libraries
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.*;
 import javax.swing.JFrame;
@@ -22,9 +24,9 @@ import javax.swing.JPanel;
 //*******************************************************************************
 // Class Definition Section
 
-public class BasicGameApp implements Runnable {
-    public int HitCountArcherQ = 5;
-    public int HitCountChar3 = 5;
+public class BasicGameApp implements Runnable, KeyListener {
+    public int HitCountArcherQ = 100;
+    public int HitCountChar3 = 100;
     //Variable Definition Section
     //Declare the variables used in the program
     //You can set their initial values too
@@ -49,6 +51,8 @@ public class BasicGameApp implements Runnable {
     private Character infernoT;
     private Character archerQ;
     private Character healer;
+
+    Character [] infernoTArray = new Character[10];
 
 
     // Main method definition
@@ -80,6 +84,12 @@ public class BasicGameApp implements Runnable {
         healer = new Character((int)(Math.random()* 1000),(int)(Math.random()* 700));
         healer.dx = 10;
         healer.dy =2;
+        infernoT.dx = 1;
+        infernoT.dy = 1;
+
+        for(int x = 0; x < infernoTArray.length; x++){
+            infernoTArray[x] = new Character((int)(Math.random()* 900), (int)(Math.random()*600));
+        }
 
 
     }// BasicGameApp()
@@ -89,8 +99,12 @@ public class BasicGameApp implements Runnable {
 //calling collisions
         collisions();
         infernoT.bounce();
-        archerQ.wrap();
+        archerQ.control();
         healer.wrap();
+
+        for(int y=0; y < infernoTArray.length; y++){
+            infernoTArray[y].wrap();
+        }
 
     }
 
@@ -104,11 +118,18 @@ public class BasicGameApp implements Runnable {
             infernoT.dy = -infernoT.dy;
             archerQ.dx = -archerQ.dx;
             archerQ.dy = -archerQ.dy;
-            HitCountArcherQ = HitCountArcherQ-1;
-            if(HitCountArcherQ<1){
-                archerQ.isAlive= false;
+            HitCountArcherQ = HitCountArcherQ - 1;
+            if (HitCountArcherQ < 1) {
+                archerQ.isAlive = false;
             }
         }
+            for(int b = 0; b < infernoTArray.length; b++){
+                if(archerQ.rec.intersects(infernoTArray[b].rec)){
+                    System.out.println("crashout");
+                    HitCountArcherQ = HitCountArcherQ - 1;
+                }
+            }
+
         //checking to see if they are not intersecting
         if (!infernoT.rec.intersects(archerQ.rec)) {
             infernoT.isCrashing = false;
@@ -199,6 +220,8 @@ public class BasicGameApp implements Runnable {
         canvas.setBounds(0, 0, WIDTH, HEIGHT);
         canvas.setIgnoreRepaint(true);
 
+        canvas.addKeyListener(this);
+
         panel.add(canvas);  // adds the canvas to the panel.
 
         // frame operations
@@ -241,9 +264,69 @@ public class BasicGameApp implements Runnable {
             g.drawString("hit points "+HitCountChar3, healer.xpos-20, healer.ypos -20);
             g.drawImage(healerPic, healer.xpos, healer.ypos, healer.width, healer.height, null);
         }
+        for(int l = 0; l < infernoTArray.length; l++){
+            g.drawImage(infernoTPic, infernoTArray[l].xpos, infernoTArray[l].ypos, infernoT.width, infernoT.height, null);
+        }
 //		g.drawImage(healerPic, healer.xpos, healer.ypos, healer.width, healer.height, null);
 
         g.dispose();
         bufferStrategy.show();
     }
+
+    @Override
+    public void keyTyped(KeyEvent e) {//dont use is bad
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        System.out.println("swag");
+        System.out.println(e.getKeyChar());
+        System.out.println(e.getKeyCode());
+        //up 38
+        //down 40
+        //left 37
+        //right 39
+        if(e.getKeyCode() == 38) {
+            System.out.println("going up");
+            archerQ.up = true;
+
+        }
+        if(e.getKeyCode() == 39){
+            System.out.println("going right");
+            archerQ.right = true;
+
+        }
+        if(e.getKeyCode() == 40){
+            System.out.println("going down");
+            archerQ.down = true;
+        }
+        if(e.getKeyCode() == 37){
+            System.out.println("going left");
+            archerQ.left = true;
+        }
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+
+        if(e.getKeyCode()==38){
+            archerQ.up = false;
+
+        }
+        if(e.getKeyCode()==39) {
+            archerQ.right = false;
+        }
+        if(e.getKeyCode()==40){
+            archerQ.down = false;
+
+        }
+        if(e.getKeyCode()==37){
+            archerQ.left = false;
+
+        }
+    }
+
 }
