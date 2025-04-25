@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 
 public class BasicGameApp implements Runnable, KeyListener {
     public int HitCountArcherQ = 100;
-    public int HitCountChar3 = 100;
+    public int HitCountChar3 = 5;
     //Variable Definition Section
     //Declare the variables used in the program
     //You can set their initial values too
@@ -97,17 +97,19 @@ public class BasicGameApp implements Runnable, KeyListener {
     public void moveThings() {
 
 //calling collisions
+        //sets how each character moves
         collisions();
         infernoT.bounce();
         archerQ.control();
-        healer.wrap();
+        healer.bounce();
 
+        //this is how my inferno array moves. Wrap
         for(int y=0; y < infernoTArray.length; y++){
             infernoTArray[y].wrap();
         }
 
     }
-
+//this is how I created the collisions each character has with each other in the game
     public void collisions() {
         if (infernoT.rec.intersects(archerQ.rec) && infernoT.isCrashing == false) {
             System.out.println("explosion");
@@ -123,6 +125,7 @@ public class BasicGameApp implements Runnable, KeyListener {
                 archerQ.isAlive = false;
             }
         }
+        //collision for tower and archerQ
             for(int b = 0; b < infernoTArray.length; b++){
                 if(archerQ.rec.intersects(infernoTArray[b].rec)){
                     System.out.println("crashout");
@@ -239,40 +242,52 @@ public class BasicGameApp implements Runnable, KeyListener {
     }
 
 
+
+
+
     //paints things on the screen using bufferStrategy
     private void render() {
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, WIDTH, HEIGHT);
-        g.drawImage(backgroundPic, 0, 0, WIDTH, HEIGHT, null);
-        //draw the image of the characters infernoT, archerQ, and healer
-        g.drawImage(infernoTPic, infernoT.xpos, infernoT.ypos, infernoT.width, infernoT.height, null);
-        if(archerQ.isAlive == true) {
-            g.setColor(Color.WHITE);
-            //creates hitpoints for archerQ
-            g.fillRect(archerQ.xpos-25, archerQ.ypos-35, 75, 20);
-            g.setColor(Color.BLACK);
+        if (archerQ.isAlive == false){
+            g.drawString("GAME OVER", 450, 300);
+        }
+        else {
 
-            g.drawString("hit points "+HitCountArcherQ, archerQ.xpos-20, archerQ.ypos -20);
-            g.drawImage(archerQPic, archerQ.xpos, archerQ.ypos, archerQ.width, archerQ.height, null);
-        }
-        if(healer.isAlive == true) {
-            //creates hitpoints for healer
-            g.setColor(Color.WHITE);
-            g.fillRect(healer.xpos-25, healer.ypos-35, 75, 20);
-            g.setColor(Color.BLACK);
 
-            g.drawString("hit points "+HitCountChar3, healer.xpos-20, healer.ypos -20);
-            g.drawImage(healerPic, healer.xpos, healer.ypos, healer.width, healer.height, null);
-        }
-        for(int l = 0; l < infernoTArray.length; l++){
-            g.drawImage(infernoTPic, infernoTArray[l].xpos, infernoTArray[l].ypos, infernoT.width, infernoT.height, null);
-        }
+            g.drawImage(backgroundPic, 0, 0, WIDTH, HEIGHT, null);
+            //draw the image of the characters infernoT, archerQ, and healer
+            g.drawImage(infernoTPic, infernoT.xpos, infernoT.ypos, infernoT.width, infernoT.height, null);
+            if (archerQ.isAlive == true) {
+                g.setColor(Color.WHITE);
+                //creates hitpoints for archerQ
+                g.fillRect(archerQ.xpos - 25, archerQ.ypos - 35, 75, 20);
+                g.setColor(Color.BLACK);
+
+                g.drawString("hit points " + HitCountArcherQ, archerQ.xpos - 20, archerQ.ypos - 20);
+                g.drawImage(archerQPic, archerQ.xpos, archerQ.ypos, archerQ.width, archerQ.height, null);
+            }
+
+
+            if (healer.isAlive == true) {
+                //creates hitpoints for healer
+                g.setColor(Color.WHITE);
+                g.fillRect(healer.xpos - 25, healer.ypos - 35, 75, 20);
+                g.setColor(Color.BLACK);
+
+                g.drawString("hit points " + HitCountChar3, healer.xpos - 20, healer.ypos - 20);
+                g.drawImage(healerPic, healer.xpos, healer.ypos, healer.width, healer.height, null);
+            }
+            for (int l = 0; l < infernoTArray.length; l++) {
+                g.drawImage(infernoTPic, infernoTArray[l].xpos, infernoTArray[l].ypos, infernoT.width, infernoT.height, null);
+            }
 //		g.drawImage(healerPic, healer.xpos, healer.ypos, healer.width, healer.height, null);
-
+        }
         g.dispose();
         bufferStrategy.show();
-    }
 
+}
+//adding keys so you can move archerQ
     @Override
     public void keyTyped(KeyEvent e) {//dont use is bad
 
