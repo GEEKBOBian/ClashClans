@@ -124,6 +124,7 @@ public class BasicGameApp implements Runnable, KeyListener {
             if (HitCountArcherQ < 1) {
                 archerQ.isAlive = false;
             }
+
         }
         //collision for tower and archerQ
             for(int b = 0; b < infernoTArray.length; b++){
