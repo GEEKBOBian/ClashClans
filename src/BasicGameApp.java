@@ -45,6 +45,7 @@ public class BasicGameApp implements Runnable, KeyListener {
     public Image archerQPic;
     public Image healerPic;
     public Image backgroundPic;
+    public boolean gameStart = false;
 
     //Declare the objects used in the program
     //These are things that are made up of more than one variable type
@@ -52,7 +53,7 @@ public class BasicGameApp implements Runnable, KeyListener {
     private Character archerQ;
     private Character healer;
 
-    Character [] infernoTArray = new Character[10];
+    Character [] infernoTArray = new Character[30];
 
 
     // Main method definition
@@ -250,39 +251,49 @@ public class BasicGameApp implements Runnable, KeyListener {
     private void render() {
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, WIDTH, HEIGHT);
-        if (archerQ.isAlive == false){
-            g.drawString("GAME OVER", 450, 300);
-        }
-        else {
+        if (gameStart == true) {
 
 
-            g.drawImage(backgroundPic, 0, 0, WIDTH, HEIGHT, null);
-            //draw the image of the characters infernoT, archerQ, and healer
-            g.drawImage(infernoTPic, infernoT.xpos, infernoT.ypos, infernoT.width, infernoT.height, null);
-            if (archerQ.isAlive == true) {
-                g.setColor(Color.WHITE);
-                //creates hitpoints for archerQ
-                g.fillRect(archerQ.xpos - 25, archerQ.ypos - 35, 75, 20);
-                g.setColor(Color.BLACK);
 
-                g.drawString("hit points " + HitCountArcherQ, archerQ.xpos - 20, archerQ.ypos - 20);
-                g.drawImage(archerQPic, archerQ.xpos, archerQ.ypos, archerQ.width, archerQ.height, null);
-            }
+            if (archerQ.isAlive == false) {
+                g.drawString("GAME OVER", 450, 300);
+            } else {
 
 
-            if (healer.isAlive == true) {
-                //creates hitpoints for healer
-                g.setColor(Color.WHITE);
-                g.fillRect(healer.xpos - 25, healer.ypos - 35, 75, 20);
-                g.setColor(Color.BLACK);
+                g.drawImage(backgroundPic, 0, 0, WIDTH, HEIGHT, null);
+                //draw the image of the characters infernoT, archerQ, and healer
+                g.drawImage(infernoTPic, infernoT.xpos, infernoT.ypos, infernoT.width, infernoT.height, null);
 
-                g.drawString("hit points " + HitCountChar3, healer.xpos - 20, healer.ypos - 20);
-                g.drawImage(healerPic, healer.xpos, healer.ypos, healer.width, healer.height, null);
-            }
-            for (int l = 0; l < infernoTArray.length; l++) {
-                g.drawImage(infernoTPic, infernoTArray[l].xpos, infernoTArray[l].ypos, infernoT.width, infernoT.height, null);
-            }
+
+                if (archerQ.isAlive == true) {
+                    g.setColor(Color.WHITE);
+                    //creates hitpoints for archerQ
+                    g.fillRect(archerQ.xpos - 25, archerQ.ypos - 35, 75, 20);
+                    g.setColor(Color.BLACK);
+
+                    g.drawString("hit points " + HitCountArcherQ, archerQ.xpos - 20, archerQ.ypos - 20);
+                    g.drawImage(archerQPic, archerQ.xpos, archerQ.ypos, archerQ.width, archerQ.height, null);
+                }
+
+
+                if (healer.isAlive == true) {
+                    //creates hitpoints for healer
+                    g.setColor(Color.WHITE);
+                    g.fillRect(healer.xpos - 25, healer.ypos - 35, 75, 20);
+                    g.setColor(Color.BLACK);
+
+                    g.drawString("hit points " + HitCountChar3, healer.xpos - 20, healer.ypos - 20);
+                    g.drawImage(healerPic, healer.xpos, healer.ypos, healer.width, healer.height, null);
+                }
+                for (int l = 0; l < infernoTArray.length; l++) {
+                    g.drawImage(infernoTPic, infernoTArray[l].xpos, infernoTArray[l].ypos, infernoT.width, infernoT.height, null);
+                }
 //		g.drawImage(healerPic, healer.xpos, healer.ypos, healer.width, healer.height, null);
+            }
+        }
+        else{
+            g.drawString("Press Y to Start", 450, 300);
+
         }
         g.dispose();
         bufferStrategy.show();
