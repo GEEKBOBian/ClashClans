@@ -53,7 +53,7 @@ public class BasicGameApp implements Runnable, KeyListener {
     private Character archerQ;
     private Character healer;
 
-    Character [] infernoTArray = new Character[30];
+    Character [] infernoTArray = new Character[40];
 
 
     // Main method definition
@@ -144,7 +144,7 @@ public class BasicGameApp implements Runnable, KeyListener {
             //interaction between archerQ and healer
             //archerQ gains health
             archerQ.isCrashing = true;
-            HitCountArcherQ= HitCountArcherQ +1;
+            HitCountArcherQ= HitCountArcherQ +10;
 
         }
         //checking to see if they are not intersecting
@@ -314,6 +314,11 @@ public class BasicGameApp implements Runnable, KeyListener {
         //down 40
         //left 37
         //right 39
+
+        if(e.getKeyCode() == 89) {
+            gameStart = true;
+        }
+
         if(e.getKeyCode() == 38) {
             System.out.println("going up");
             archerQ.up = true;
